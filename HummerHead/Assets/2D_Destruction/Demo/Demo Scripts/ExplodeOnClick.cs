@@ -16,8 +16,8 @@ public class ExplodeOnClick : MonoBehaviour {
         if (col.gameObject.CompareTag("Player"))
         {
 		    _explodable.explode(col.contacts[0].point);
-		    ExplosionForce ef = GameObject.FindObjectOfType<ExplosionForce>();
-		    ef.doExplosion(transform.position);
+		    //ExplosionForce ef = GameObject.FindObjectOfType<ExplosionForce>();
+		    //ef.doExplosion(transform.position);
         }
 	}
 }
