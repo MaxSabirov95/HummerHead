@@ -45,6 +45,18 @@ public class Explodable : MonoBehaviour
                 if (Vector2.Distance(frag.transform.position, hitPoint) < 1.5f)
                 {
                     frag.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+                    /*
+                     * Player's velocity on impact
+                     * Add upward velocity
+                     * Random???
+                     * Somehow mash all this into one Vector2 that determines the fragment's velocity
+                     */
+                    Vector2 playerVel = BlackBoard.hummerHead.GetComponentInParent<Rigidbody2D>().velocity.normalized;
+                    float direction = Mathf.Sign(BlackBoard.hummerHead.GetComponentInParent<Rigidbody2D>().velocity.x);
+                    Vector2 addedUpward = new Vector2(Random.Range(0f, direction), 1);
+                    playerVel += addedUpward;
+                    playerVel.Normalize();
+                    frag.GetComponent<Rigidbody2D>().AddForce(BlackBoard.hummerHead.force * playerVel, ForceMode2D.Impulse);
                     frag.GetComponent<Fragment>().StartObjectDestroy();
                 }
             }
