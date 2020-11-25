@@ -84810,7 +84810,7 @@ GameObject:
   - component: {fileID: 1214425905}
   - component: {fileID: 1214425904}
   - component: {fileID: 1214425903}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -95649,7 +95649,7 @@ GameObject:
   - component: {fileID: 1359140225}
   - component: {fileID: 1359140226}
   - component: {fileID: 1359140227}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HammerHead
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -95694,7 +95694,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.44816476, y: 0.07549596}
+  m_Size: {x: 0.75, y: 0.07549596}
   m_EdgeRadius: 0
 --- !u!114 &1359140227
 MonoBehaviour:

@@ -22,6 +22,7 @@ public class HummerHead : MonoBehaviour
             //sp.rotation = Vector2.SignedAngle(GetComponentInParent<Rigidbody2D>().velocity, Vector2.up) * Vector2.up;
             //effect.Play();
             Cam.camera.ShakeCamera();
+            gameObject.SetActive(false);
         }
     }
 }

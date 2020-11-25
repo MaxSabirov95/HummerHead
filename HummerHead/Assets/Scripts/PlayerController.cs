@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        if (playerRB.velocity.y < 0 && breakHummerHead.activeInHierarchy)
+        if (playerRB.velocity.y <= 0 && breakHummerHead.activeInHierarchy)
         {
             breakHummerHead.SetActive(false);
         }

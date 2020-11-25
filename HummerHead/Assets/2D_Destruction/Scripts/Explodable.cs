@@ -45,6 +45,7 @@ public class Explodable : MonoBehaviour
                 if (Vector2.Distance(frag.transform.position, hitPoint) < 1.5f)
                 {
                     frag.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+                    frag.layer = 9;
                     /*
                      * Player's velocity on impact
                      * Add upward velocity
