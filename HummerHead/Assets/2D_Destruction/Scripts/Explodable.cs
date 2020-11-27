@@ -40,7 +40,7 @@ public class Explodable : MonoBehaviour
         {
             foreach (GameObject frag in fragments)
             {
-                frag.transform.parent = null;
+                frag.transform.SetParent(transform.parent);
                 frag.SetActive(true);
                 if (Vector2.Distance(frag.transform.position, hitPoint) < 1.5f)
                 {
@@ -84,7 +84,7 @@ public class Explodable : MonoBehaviour
             frag.transform.tag = "Breakable";
             frag.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
             frag.AddComponent<Fragment>();
-            frag.transform.parent = transform;
+            frag.transform.SetParent(transform);
             frag.SetActive(false);
         }
     }
