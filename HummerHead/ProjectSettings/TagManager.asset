@@ -52,3 +52,6 @@ TagManager:
   - name: Stone
     uniqueID: 3985308755
     locked: 0
+  - name: UI
+    uniqueID: 885415659
+    locked: 0

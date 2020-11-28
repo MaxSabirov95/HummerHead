@@ -13,12 +13,16 @@ public class PlayerController : MonoBehaviour
 
     bool landsOnGround;
     bool faceRight;
+    public int HP;
+    public Bar healthBar;
+    public GameObject HPBar;
 
     // Start is called before the first frame update
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
         breakHummerHead = transform.GetChild(0).gameObject;
+        healthBar.SetMaxHealth(HP);
     }
 
     // Update is called once per frame
@@ -62,6 +66,12 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            HP -= 25;
+            healthBar.SetHealth(HP);
+        }
     }
     
 
@@ -83,6 +93,7 @@ public class PlayerController : MonoBehaviour
     void Flip()
     {
         faceRight = !faceRight;
-        transform.Rotate(-180 * Vector3.up);
+        HPBar.transform.forward = Camera.main.transform.forward;
+        transform.Rotate(180 * Vector3.up);
     }
 }
