@@ -21,8 +21,10 @@ public class BirdEnemy : MonoBehaviour
     private float countDown;
     private bool attack;
     public float attackSpeed;
+
+    private bool isDead;
     
-    IEnumerator StartAttck()
+    IEnumerator StartAttack()
     {
         flySpeed = 0;
         attack = true;
@@ -40,7 +42,6 @@ public class BirdEnemy : MonoBehaviour
             yield return null;
         }
         flySpeed = flySpeedValue;
-        attack = false;
         countDown = Random.Range(minTimerToAttack, maxTimerToAttack);
     }
 
@@ -64,16 +65,19 @@ public class BirdEnemy : MonoBehaviour
         transform.position = worldPos;
         flySpeed = flySpeedValue;
         birbSR.enabled = birbCol.enabled = true;
+        attack = false;
+        isDead = false;
     }
 
     void Update()
     {
+        if (isDead) return;
         if (!attack)
         {
             countDown -= Time.deltaTime;
             if (countDown <= 0)
             {
-                StartCoroutine(StartAttck());
+                StartCoroutine("StartAttack");
             }
         }
     }
@@ -86,8 +90,10 @@ public class BirdEnemy : MonoBehaviour
 
     private void FlyToPosition()
     {
-        if (attack) return;
-        birbRB.velocity = -side * Vector2.right * flySpeed * Time.fixedDeltaTime;
+        if (!attack)
+        {
+            birbRB.velocity = -side * Vector2.right * flySpeed * Time.fixedDeltaTime;
+        }
 
         Vector2 viewPortPos = Camera.main.WorldToViewportPoint(transform.position);
         if (Mathf.Abs(viewPortPos.x - (0.5f - 0.7f * side)) <= 0.05f)
@@ -100,6 +106,7 @@ public class BirdEnemy : MonoBehaviour
     {
         if (other.GetComponent<Fragment>())
         {
+            StopAllCoroutines();
             StartCoroutine(DieWithEffect());
         }
 
@@ -112,6 +119,8 @@ public class BirdEnemy : MonoBehaviour
 
     IEnumerator DieWithEffect()
     {
+        isDead = true;
+        countDown = Random.Range(minTimerToAttack, maxTimerToAttack);
         flySpeed = 0;
         birbSR.enabled = birbCol.enabled = false;
         featherParticles.Play();
