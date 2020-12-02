@@ -16,7 +16,34 @@ public class BirdEnemy : MonoBehaviour
     private ParticleSystem featherParticles;
     private Collider2D birbCol;
 
-    // Start is called before the first frame update
+    public float minTimerToAttack;
+    public float maxTimerToAttack;
+    private float countDown;
+    private bool attack;
+    public float attackSpeed;
+    
+    IEnumerator StartAttck()
+    {
+        flySpeed = 0;
+        attack = true;
+        yield return new WaitForSeconds(0.5f);
+        Vector3 position = transform.position;
+        Vector3 playerPos = BlackBoard.player.transform.position;
+        while (transform.position != playerPos)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, playerPos, attackSpeed * Time.deltaTime);
+            yield return null;
+        }
+        while (transform.position != position)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, position, (attackSpeed * Time.deltaTime) / 1.5f);
+            yield return null;
+        }
+        flySpeed = flySpeedValue;
+        attack = false;
+        countDown = Random.Range(minTimerToAttack, maxTimerToAttack);
+    }
+
     void Start()
     {
         birbRB = GetComponent<Rigidbody2D>();
@@ -24,6 +51,7 @@ public class BirdEnemy : MonoBehaviour
         birbCol = GetComponent<Collider2D>();
         featherParticles = GetComponentInChildren<ParticleSystem>();
         flySpeedValue = flySpeed;
+        countDown = Random.Range(minTimerToAttack, maxTimerToAttack);
         RandomizeNewPos();
     }
 
@@ -31,8 +59,6 @@ public class BirdEnemy : MonoBehaviour
     {
         side = Mathf.RoundToInt(Mathf.Sign(Random.Range(-2, 2)));
         birbSR.flipX = side == -1;
-        Debug.Log(0.5f + 0.7f * side);
-        Debug.Log(0.5f - 0.7f * side);
         Vector2 viewPortPos = new Vector2(0.5f + 0.7f * side, Random.Range(bottomHeightRange, topHeightRange));
         Vector2 worldPos = Camera.main.ViewportToWorldPoint(viewPortPos);
         transform.position = worldPos;
@@ -40,9 +66,27 @@ public class BirdEnemy : MonoBehaviour
         birbSR.enabled = birbCol.enabled = true;
     }
 
+    void Update()
+    {
+        if (!attack)
+        {
+            countDown -= Time.deltaTime;
+            if (countDown <= 0)
+            {
+                StartCoroutine(StartAttck());
+            }
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
+        FlyToPosition();
+    }
+
+    private void FlyToPosition()
+    {
+        if (attack) return;
         birbRB.velocity = -side * Vector2.right * flySpeed * Time.fixedDeltaTime;
 
         Vector2 viewPortPos = Camera.main.WorldToViewportPoint(transform.position);
@@ -57,6 +101,12 @@ public class BirdEnemy : MonoBehaviour
         if (other.GetComponent<Fragment>())
         {
             StartCoroutine(DieWithEffect());
+        }
+
+        if (other.CompareTag("Player"))
+        {
+            BlackBoard.player.HP -= 10;
+            BlackBoard.player.healthBar.SetHealth(BlackBoard.player.HP);
         }
     }
 

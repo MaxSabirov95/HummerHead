@@ -5,4 +5,5 @@ using UnityEngine;
 public static class BlackBoard 
 {
     public static HummerHead hummerHead;
+    public static PlayerController player;
 }

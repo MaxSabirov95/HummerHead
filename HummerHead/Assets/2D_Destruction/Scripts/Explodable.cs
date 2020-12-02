@@ -58,6 +58,7 @@ public class Explodable : MonoBehaviour
                     playerVel += addedUpward;
                     playerVel.Normalize();
                     frag.GetComponent<Rigidbody2D>().AddForce(BlackBoard.hummerHead.force * playerVel, ForceMode2D.Impulse);
+                    frag.AddComponent<Fragment>();
                     frag.GetComponent<Fragment>().StartObjectDestroy();
                 }
             }
@@ -83,7 +84,7 @@ public class Explodable : MonoBehaviour
         {
             frag.transform.tag = "Breakable";
             frag.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-            frag.AddComponent<Fragment>();
+            //frag.AddComponent<Fragment>();
             frag.transform.SetParent(transform);
             frag.SetActive(false);
         }

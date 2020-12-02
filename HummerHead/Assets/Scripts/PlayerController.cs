@@ -13,43 +13,72 @@ public class PlayerController : MonoBehaviour
 
     bool landsOnGround;
     bool faceRight;
-    public int HP;
+    public int HP { get; set; }
+    public int maxHP;
     public Bar healthBar;
     public GameObject HPBar;
+
+    private float horizontalMove;
+
+    void Awake()
+    {
+        BlackBoard.player = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
         breakHummerHead = transform.GetChild(0).gameObject;
-        healthBar.SetMaxHealth(HP);
+        healthBar.SetMaxHealth(maxHP);
+        HP = maxHP;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(Jump());
-        }
+        HandleInput();
+
+        HandleAnimation();
 
         if (playerRB.velocity.y <= 0 && breakHummerHead.activeInHierarchy)
         {
             breakHummerHead.SetActive(false);
         }
+
+        Debug.Log(HP);
     }
+
+    private void HandleInput()
+    {
+        horizontalMove = Input.GetAxisRaw("Horizontal");
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(Jump());
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            HP -= 25;
+            healthBar.SetHealth(HP);
+        }
+    }
+
     private void FixedUpdate()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        playerRB.AddForce(horizontal * moveSpeed * Vector3.right);
+        playerRB.AddForce(horizontalMove * moveSpeed * Vector3.right);
         Vector2 vel = playerRB.velocity;
         vel.x = Mathf.Clamp(vel.x, -maxMoveSpeed, maxMoveSpeed);
         playerRB.velocity = vel;
-        float a = horizontal * moveSpeed;
+    }
+
+    private void HandleAnimation()
+    {
+        float a = horizontalMove * moveSpeed;
         if (a < 0)
         {
             a *= -1;
         }
+
         anim.SetFloat("Run", a);
 
         if (landsOnGround)
@@ -58,22 +87,15 @@ public class PlayerController : MonoBehaviour
             landsOnGround = false;
         }
 
-        if (horizontal > 0 && faceRight)
+        if (horizontalMove > 0 && faceRight)
         {
             Flip();
         }
-        else if (horizontal < 0 && !faceRight)
+        else if (horizontalMove < 0 && !faceRight)
         {
             Flip();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            HP -= 25;
-            healthBar.SetHealth(HP);
         }
     }
-    
 
     IEnumerator Jump()
     {
@@ -90,6 +112,7 @@ public class PlayerController : MonoBehaviour
             landsOnGround = true;
         }
     }
+    
     void Flip()
     {
         faceRight = !faceRight;
