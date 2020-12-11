@@ -74,11 +74,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleAnimation()
     {
-        float a = horizontalMove * moveSpeed;
-        if (a < 0)
-        {
-            a *= -1;
-        }
+        float a = Mathf.Abs(horizontalMove * moveSpeed);
 
         anim.SetFloat("Run", a);
 
