@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D playerRB;
     private GameObject breakHummerHead;
 
+    private bool invulnerable = false;
+
     bool landsOnGround;
     bool faceRight;
     public int HP { get; set; }
@@ -58,8 +60,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
-            HP -= 25;
-            healthBar.SetHealth(HP);
+            TakeDamage(25);
         }
     }
 
@@ -118,5 +119,19 @@ public class PlayerController : MonoBehaviour
         faceRight = !faceRight;
         HPBar.transform.forward = Camera.main.transform.forward;
         transform.Rotate(180 * Vector3.up);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (invulnerable) return;
+        invulnerable = true;
+        HP -= damage;
+        healthBar.SetHealth(HP);
+        Invoke("StopInvulnerable", 3f);
+    }
+
+    void StopInvulnerable()
+    {
+        invulnerable = false;
     }
 }
