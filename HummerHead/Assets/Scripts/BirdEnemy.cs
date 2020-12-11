@@ -112,8 +112,7 @@ public class BirdEnemy : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            BlackBoard.player.HP -= 10;
-            BlackBoard.player.healthBar.SetHealth(BlackBoard.player.HP);
+            BlackBoard.player.TakeDamage(10);
         }
     }
 

@@ -23,4 +23,18 @@ public class SwarmMonster : MonoBehaviour
         rb.AddForce(direction * speedMultiplier);
         rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxVelocity);
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.GetComponent<Fragment>()) //if the colliding object is a fragment
+        {
+            headToFollow.RegisterMonsterDeath(this);
+            Destroy(gameObject);
+        }
+
+        if (other.CompareTag("Player"))
+        {
+            BlackBoard.player.TakeDamage(10);
+        }
+    }
 }
