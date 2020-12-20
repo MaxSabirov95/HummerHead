@@ -19,22 +19,26 @@ public class SwarmMonster : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector2 direction = (headToFollow.transform.position - transform.position).normalized;
-        rb.AddForce(direction * speedMultiplier);
+        Vector2 direction = headToFollow.transform.position - transform.position;
+        rb.AddForce(direction.normalized * speedMultiplier);
         rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxVelocity);
+        if (direction.sqrMagnitude > 9)
+        {
+            rb.velocity = Vector2.zero;
+        }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.GetComponent<Fragment>()) //if the colliding object is a fragment
+        if (other.gameObject.GetComponent<Fragment>()) //if the colliding object is a fragment
         {
             headToFollow.RegisterMonsterDeath(this);
             Destroy(gameObject);
         }
 
-        if (other.CompareTag("Player"))
-        {
-            BlackBoard.player.TakeDamage(10);
-        }
+        //if (other.CompareTag("Player"))
+        //{
+        //    BlackBoard.player.TakeDamage(10);
+        //}
     }
 }
